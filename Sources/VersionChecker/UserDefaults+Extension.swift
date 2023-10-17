@@ -10,7 +10,7 @@ import InfomaniakCore
 
 extension UserDefaults.Keys {
     static let timerKey = UserDefaults.Keys(rawValue: "showUpdateTimer")
-    static let lastForcedUpdateKey = UserDefaults.Keys(rawValue: "lastForcedUpdateTag")
+    static let lastUpdateAskedKey = UserDefaults.Keys(rawValue: "lastUpdateAskedTag")
 }
 
 extension UserDefaults {
@@ -23,12 +23,12 @@ extension UserDefaults {
         }
     }
 
-    var lastForcedUpdate: String? {
+    var lastUpdateAsked: String? {
         get {
-            return string(forKey: key(.lastForcedUpdateKey))
+            return string(forKey: key(.lastUpdateAskedKey))
         }
         set {
-            set(newValue, forKey: key(.lastForcedUpdateKey))
+            set(newValue, forKey: key(.lastUpdateAskedKey))
         }
     }
 }
