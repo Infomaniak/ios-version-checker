@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "ios-version-checker",
+    name: "VersionChecker",
     defaultLocalization: "en",
     platforms: [
         .iOS(.v15)
@@ -12,8 +12,8 @@ let package = Package(
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
-            name: "ios-version-checker",
-            targets: ["ios-version-checker"]
+            name: "VersionChecker",
+            targets: ["VersionChecker"]
         ),
     ],
     dependencies: [
@@ -23,14 +23,14 @@ let package = Package(
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "ios-version-checker",
+            name: "VersionChecker",
             dependencies: [
                 .product(name: "InfomaniakCore", package: "ios-core")
             ]
         ),
         .testTarget(
-            name: "ios-version-checkerTests",
-            dependencies: ["ios-version-checker"]
+            name: "VersionChecker",
+            dependencies: ["VersionChecker"]
         ),
     ]
 )
