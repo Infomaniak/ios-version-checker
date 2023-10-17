@@ -55,8 +55,8 @@ public struct VersionChecker {
 
         let timer = UserDefaults.standard.timer
         let publishedDate = publishedDate(from: publishedVersion.tagUpdatedAt) ?? Date()
-        if timer == 0 || Calendar.current.numberOfDaysBetween(Date(), and: publishedDate) <= -2 &&
-            UserDefaults.standard.lastUpdateAsked != versionFrom(publishedVersion: publishedVersion) {
+        if timer == 0 || (Calendar.current.numberOfDaysBetween(Date(), and: publishedDate) <= -2 &&
+            UserDefaults.standard.lastUpdateAsked != versionFrom(publishedVersion: publishedVersion)) {
             UserDefaults.standard.lastUpdateAsked = versionFrom(publishedVersion: publishedVersion)
             return true
         }
