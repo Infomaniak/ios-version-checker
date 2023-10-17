@@ -29,7 +29,7 @@ let package = Package(
             ]
         ),
         .testTarget(
-            name: "VersionChecker",
+            name: "VersionCheckerTests",
             dependencies: ["VersionChecker"]
         ),
     ]
