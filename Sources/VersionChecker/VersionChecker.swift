@@ -9,18 +9,28 @@ import Alamofire
 import Foundation
 import InfomaniakCore
 
-extension Calendar {
-    func numberOfDaysBetween(_ from: Date, and to: Date) -> Int {
-        let fromDate = startOfDay(for: from) // <1>
-        let toDate = startOfDay(for: to) // <2>
-        let numberOfDays = dateComponents([.day], from: fromDate, to: toDate) // <3>
-
-        return numberOfDays.day!
-    }
-}
-
 public struct VersionChecker {
     public static let standard = VersionChecker()
+    private let appLaunchCounter = AppLaunchCounter()
+
+    public mutating func showUpdateVersion() async throws -> Bool {
+        let apiFetcher = ApiFetcher()
+        let version = try await apiFetcher.version()
+
+        guard let publishedVersion = version.publishedVersions
+            .first(where: { $0.type == (Bundle.main.isRunningInTestFlight ? .beta : .production) }),
+            try await appNeedUpdate(publishedVersion: publishedVersion) else {
+            return false
+        }
+
+        if shouldAskForUpdate(publishedVersion: publishedVersion) {
+            lastRequestVersion = versionFrom(publishedVersion: publishedVersion)
+            lastRequestCounter = appLaunchCounter.value
+            lastRequestDate = Date().toString()
+            return true
+        }
+        return false
+    }
 
     private func appNeedUpdate(publishedVersion: PublishedVersion) async throws -> Bool {
         guard let currentTag = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String,
@@ -32,69 +42,79 @@ public struct VersionChecker {
         let currentVersion = versionFrom(tag: currentTag, build: currentBuild)
         let latestVersion = versionFrom(publishedVersion: publishedVersion)
 
-        return currentVersion.compare(latestVersion, options: .numeric) == .orderedAscending
+        return compareVersion(currentVersion, isOlderThan: latestVersion)
     }
 
+    private func shouldAskForUpdate(publishedVersion: PublishedVersion) -> Bool {
+        if compareVersion(lastRequestVersion, isOlderThan: versionFrom(publishedVersion: publishedVersion)) {
+            return true
+        } else if lastRequestCounter == appLaunchCounter.value {
+            return true
+        } else if isTooOld(version: publishedVersion) &&
+            lastRequestVersion != versionFrom(publishedVersion: publishedVersion) {
+            return true
+        }
+        return false
+    }
+
+    public mutating func updateLater() {
+        lastRequestCounter = appLaunchCounter.value + 10
+    }
+}
+
+// MARK: - Properties
+
+extension VersionChecker {
+    private var lastRequestDate: String? {
+        get {
+            return UserDefaults.standard.lastRequestDate
+        }
+        set {
+            UserDefaults.standard.lastRequestDate = newValue
+        }
+    }
+
+    private var lastRequestCounter: Int {
+        get {
+            return UserDefaults.standard.lastRequestCounter
+        }
+        set {
+            UserDefaults.standard.lastRequestCounter = newValue
+        }
+    }
+
+    private var lastRequestVersion: String? {
+        get {
+            return UserDefaults.standard.lastRequestVersion
+        }
+        set {
+            UserDefaults.standard.lastRequestVersion = newValue
+        }
+    }
+}
+
+// MARK: - Comparator
+
+extension VersionChecker {
+    private func compareVersion(_ version: String?, isOlderThan newVersion: String) -> Bool {
+        guard let version else { return true }
+        return version.compare(newVersion, options: .numeric) == .orderedAscending
+    }
+
+    private func isTooOld(version: PublishedVersion) -> Bool {
+        let publishedDate = version.tagUpdatedAt.toDate() ?? Date()
+        return Calendar.current.numberOfDaysBetween(Date(), and: publishedDate) <= -2
+    }
+}
+
+// MARK: - Utils
+
+extension VersionChecker {
     private func versionFrom(tag: String, build: String) -> String {
         return "\(tag) - \(build)"
     }
 
     private func versionFrom(publishedVersion: PublishedVersion) -> String {
         return versionFrom(tag: publishedVersion.tag, build: publishedVersion.buildVersion)
-    }
-
-    public func showUpdateVersion() async throws -> Bool {
-        let apiFetcher = ApiFetcher()
-        let version = try await apiFetcher.version()
-
-        guard let publishedVersion = version.publishedVersions
-            .first(where: { $0.type == (Bundle.main.isRunningInTestFlight ? .beta : .production) }),
-            try await appNeedUpdate(publishedVersion: publishedVersion) else {
-            return false
-        }
-
-        let timer = UserDefaults.standard.timer
-        let publishedDate = publishedDate(from: publishedVersion.tagUpdatedAt) ?? Date()
-        if timer == 0 || (Calendar.current.numberOfDaysBetween(Date(), and: publishedDate) <= -2 &&
-            UserDefaults.standard.lastUpdateAsked != versionFrom(publishedVersion: publishedVersion)) {
-            UserDefaults.standard.lastUpdateAsked = versionFrom(publishedVersion: publishedVersion)
-            return true
-        }
-
-        UserDefaults.standard.timer -= 1
-        return false
-    }
-
-    private func publishedDate(from value: String) -> Date? {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        return dateFormatter.date(from: value)
-    }
-
-    public func updateLater() {
-        UserDefaults.standard.timer = 10
-    }
-}
-
-extension Endpoint {
-    static func version(store: Store, platform: Platform, appName: String) -> Endpoint {
-        return Endpoint(path: "/1/app-information/versions/\(store.rawValue)/\(platform.rawValue)/\(appName)")
-    }
-}
-
-extension ApiFetcher {
-    var versionDecoder: JSONDecoder {
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
-        return decoder
-    }
-
-    func version() async throws -> Version {
-        let endpoint = Endpoint.version(store: .appleStore, platform: .ios, appName: "com.infomaniak.mail")
-
-        let response = await AF.request(endpoint.url).serializingDecodable(ResponseVersion.self,
-                                                                           automaticallyCancelling: true,
-                                                                           decoder: versionDecoder).response
-        return try response.result.get().data
     }
 }

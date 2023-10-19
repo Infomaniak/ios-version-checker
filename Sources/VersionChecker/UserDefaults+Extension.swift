@@ -9,26 +9,36 @@ import Foundation
 import InfomaniakCore
 
 extension UserDefaults.Keys {
-    static let timerKey = UserDefaults.Keys(rawValue: "showUpdateTimer")
-    static let lastUpdateAskedKey = UserDefaults.Keys(rawValue: "lastUpdateAskedTag")
+    static let lastRequestCounter = UserDefaults.Keys(rawValue: "lastRequestCounter")
+    static let lastRequestDate = UserDefaults.Keys(rawValue: "lastRequestDate")
+    static let lastRequestVersion = UserDefaults.Keys(rawValue: "lastRequestVersion")
 }
 
 extension UserDefaults {
-    var timer: Int {
+    var lastRequestCounter: Int {
         get {
-            return integer(forKey: key(.timerKey))
+            return integer(forKey: key(.lastRequestCounter))
         }
         set {
-            set(newValue, forKey: key(.timerKey))
+            set(newValue, forKey: key(.lastRequestCounter))
         }
     }
 
-    var lastUpdateAsked: String? {
+    var lastRequestDate: String? {
         get {
-            return string(forKey: key(.lastUpdateAskedKey))
+            return string(forKey: key(.lastRequestDate))
         }
         set {
-            set(newValue, forKey: key(.lastUpdateAskedKey))
+            set(newValue, forKey: key(.lastRequestDate))
+        }
+    }
+
+    var lastRequestVersion: String? {
+        get {
+            return string(forKey: key(.lastRequestVersion))
+        }
+        set {
+            set(newValue, forKey: key(.lastRequestVersion))
         }
     }
 }

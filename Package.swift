@@ -17,7 +17,7 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/Infomaniak/ios-core", .upToNextMajor(from: "3.4.0"))
+        .package(url: "https://github.com/Infomaniak/ios-core", .revision("0d5ad3701d0349f99a12c67dd1226158d9e0494c"))
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
