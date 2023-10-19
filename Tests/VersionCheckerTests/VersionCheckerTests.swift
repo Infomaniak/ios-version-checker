@@ -1,7 +1,7 @@
 import XCTest
-@testable import ios_version_checker
+@testable import VersionChecker
 
-final class ios_version_checkerTests: XCTestCase {
+final class VersionCheckerTests: XCTestCase {
     func testExample() throws {
         // XCTest Documentation
         // https://developer.apple.com/documentation/xctest
