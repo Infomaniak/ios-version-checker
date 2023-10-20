@@ -26,7 +26,6 @@ public struct VersionChecker {
         if shouldAskForUpdate(publishedVersion: publishedVersion) {
             lastRequestVersion = versionFrom(publishedVersion: publishedVersion)
             lastRequestCounter = appLaunchCounter.value
-            lastRequestDate = Date().toString()
             return true
         }
         return false
@@ -57,15 +56,6 @@ public struct VersionChecker {
 // MARK: - Properties
 
 extension VersionChecker {
-    private var lastRequestDate: String? {
-        get {
-            return UserDefaults.standard.lastRequestDate
-        }
-        set {
-            UserDefaults.standard.lastRequestDate = newValue
-        }
-    }
-
     private var lastRequestCounter: Int {
         get {
             return UserDefaults.standard.lastRequestCounter
