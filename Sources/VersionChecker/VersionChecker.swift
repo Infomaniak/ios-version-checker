@@ -13,7 +13,7 @@ public struct VersionChecker {
     public static let standard = VersionChecker()
     private let appLaunchCounter = AppLaunchCounter()
 
-    public mutating func showUpdateVersion() async throws -> Bool {
+    public func showUpdateVersion() async throws -> Bool {
         let apiFetcher = ApiFetcher()
         let version = try await apiFetcher.version()
 
@@ -26,7 +26,7 @@ public struct VersionChecker {
             return false
         }
 
-        lastRequestVersion = versionFrom(publishedVersion: publishedVersion)
+        VersionChecker.lastRequestVersion = versionFrom(publishedVersion: publishedVersion)
         return true
     }
 
@@ -51,7 +51,7 @@ public struct VersionChecker {
 // MARK: - Properties
 
 extension VersionChecker {
-    private var lastRequestVersion: String? {
+    private static var lastRequestVersion: String? {
         get {
             return UserDefaults.standard.lastRequestVersion
         }
@@ -69,7 +69,7 @@ extension VersionChecker {
     }
 
     private func newVersionIsDifferent(publishedVersion: PublishedVersion) -> Bool {
-        return versionFrom(publishedVersion: publishedVersion) != lastRequestVersion && isTooOld(version: publishedVersion)
+        return versionFrom(publishedVersion: publishedVersion) != VersionChecker.lastRequestVersion && isTooOld(version: publishedVersion)
     }
 
     private func isTooOld(version: PublishedVersion) -> Bool {
