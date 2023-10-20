@@ -17,17 +17,17 @@ public struct VersionChecker {
         let apiFetcher = ApiFetcher()
         let version = try await apiFetcher.version()
 
-        guard let publishedVersion = version.publishedVersions
-            .first(where: { $0.type == (Bundle.main.isRunningInTestFlight ? .beta : .production) }),
-            try await appNeedUpdate(publishedVersion: publishedVersion) else {
+        let publishedVersion = version.publishedVersions
+            .first(where: { $0.type == (Bundle.main.isRunningInTestFlight ? .beta : .production) })
+
+        guard let publishedVersion,
+              try await appNeedUpdate(publishedVersion: publishedVersion),
+              shouldAskForUpdate(publishedVersion: publishedVersion) else {
             return false
         }
 
-        if shouldAskForUpdate(publishedVersion: publishedVersion) {
-            lastRequestVersion = versionFrom(publishedVersion: publishedVersion)
-            return true
-        }
-        return false
+        lastRequestVersion = versionFrom(publishedVersion: publishedVersion)
+        return true
     }
 
     private func appNeedUpdate(publishedVersion: PublishedVersion) async throws -> Bool {
@@ -40,11 +40,11 @@ public struct VersionChecker {
         let currentVersion = versionFrom(tag: currentTag, build: currentBuild)
         let latestVersion = versionFrom(publishedVersion: publishedVersion)
 
-        return compareVersion(currentVersion, isOlderThan: latestVersion)
+        return currentVersion != latestVersion
     }
 
     private func shouldAskForUpdate(publishedVersion: PublishedVersion) -> Bool {
-        return requestCounterValidate || newVersionIsDifferent(publishedVersion: publishedVersion)
+        return requestCounterIsValid || newVersionIsDifferent(publishedVersion: publishedVersion)
     }
 }
 
@@ -64,17 +64,12 @@ extension VersionChecker {
 // MARK: - Comparator
 
 extension VersionChecker {
-    private var requestCounterValidate: Bool {
+    private var requestCounterIsValid: Bool {
         return appLaunchCounter.value % 10 == 0
     }
 
     private func newVersionIsDifferent(publishedVersion: PublishedVersion) -> Bool {
         return versionFrom(publishedVersion: publishedVersion) != lastRequestVersion && isTooOld(version: publishedVersion)
-    }
-
-    private func compareVersion(_ version: String?, isOlderThan newVersion: String) -> Bool {
-        guard let version else { return true }
-        return version.compare(newVersion, options: .numeric) == .orderedAscending
     }
 
     private func isTooOld(version: PublishedVersion) -> Bool {

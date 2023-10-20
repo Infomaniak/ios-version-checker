@@ -14,7 +14,7 @@ struct ResponseVersion: Codable {
 
 struct Version: Codable {
     var id: Int
-    var name: String // com.infomaniak.mail
+    var name: String
     var platform: Platform
     var store: Store
     var apiId: String
