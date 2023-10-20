@@ -46,15 +46,7 @@ public struct VersionChecker {
     }
 
     private func shouldAskForUpdate(publishedVersion: PublishedVersion) -> Bool {
-        if compareVersion(lastRequestVersion, isOlderThan: versionFrom(publishedVersion: publishedVersion)) {
-            return true
-        } else if lastRequestCounter == appLaunchCounter.value {
-            return true
-        } else if isTooOld(version: publishedVersion) &&
-            lastRequestVersion != versionFrom(publishedVersion: publishedVersion) {
-            return true
-        }
-        return false
+        return requestCounterValidate || newVersionIsDifferent(publishedVersion: publishedVersion)
     }
 
     public mutating func updateLater() {
@@ -96,6 +88,14 @@ extension VersionChecker {
 // MARK: - Comparator
 
 extension VersionChecker {
+    private var requestCounterValidate: Bool {
+        return appLaunchCounter.value % 10 == 0
+    }
+
+    private func newVersionIsDifferent(publishedVersion: PublishedVersion) -> Bool {
+        return versionFrom(publishedVersion: publishedVersion) != lastRequestVersion && isTooOld(version: publishedVersion)
+    }
+
     private func compareVersion(_ version: String?, isOlderThan newVersion: String) -> Bool {
         guard let version else { return true }
         return version.compare(newVersion, options: .numeric) == .orderedAscending
@@ -103,7 +103,7 @@ extension VersionChecker {
 
     private func isTooOld(version: PublishedVersion) -> Bool {
         let publishedDate = version.tagUpdatedAt.toDate() ?? Date()
-        return Calendar.current.numberOfDaysBetween(Date(), and: publishedDate) <= -2
+        return Calendar.current.numberOfDaysBetween(Date(), and: publishedDate) <= -7
     }
 }
 
