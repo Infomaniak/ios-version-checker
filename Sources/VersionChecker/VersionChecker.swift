@@ -25,7 +25,6 @@ public struct VersionChecker {
 
         if shouldAskForUpdate(publishedVersion: publishedVersion) {
             lastRequestVersion = versionFrom(publishedVersion: publishedVersion)
-            lastRequestCounter = appLaunchCounter.value
             return true
         }
         return false
@@ -47,24 +46,11 @@ public struct VersionChecker {
     private func shouldAskForUpdate(publishedVersion: PublishedVersion) -> Bool {
         return requestCounterValidate || newVersionIsDifferent(publishedVersion: publishedVersion)
     }
-
-    public mutating func updateLater() {
-        lastRequestCounter = appLaunchCounter.value + 10
-    }
 }
 
 // MARK: - Properties
 
 extension VersionChecker {
-    private var lastRequestCounter: Int {
-        get {
-            return UserDefaults.standard.lastRequestCounter
-        }
-        set {
-            UserDefaults.standard.lastRequestCounter = newValue
-        }
-    }
-
     private var lastRequestVersion: String? {
         get {
             return UserDefaults.standard.lastRequestVersion
