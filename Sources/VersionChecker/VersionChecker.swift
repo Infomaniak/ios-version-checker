@@ -40,7 +40,7 @@ public struct VersionChecker {
         let currentVersion = versionFrom(tag: currentTag, build: currentBuild)
         let latestVersion = versionFrom(publishedVersion: publishedVersion)
 
-        return currentVersion != latestVersion
+        return currentVersion.compare(latestVersion, options: .numeric) == .orderedAscending
     }
 
     private func shouldAskForUpdate(publishedVersion: PublishedVersion) -> Bool {
