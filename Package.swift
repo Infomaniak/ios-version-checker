@@ -7,7 +7,7 @@ let package = Package(
     name: "VersionChecker",
     defaultLocalization: "en",
     platforms: [
-        .iOS(.v15)
+        .iOS(.v13)
     ],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
