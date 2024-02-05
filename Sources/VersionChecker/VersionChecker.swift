@@ -84,8 +84,7 @@ extension VersionChecker {
     }
 
     private func isTooOld(version: PublishedVersion) -> Bool {
-        let publishedDate = version.tagUpdatedAt
-        return Calendar.current.numberOfDaysBetween(Date(), and: publishedDate) <= -7
+        return Calendar.current.numberOfDaysBetween(Date(), and: version.tagUpdatedAt) <= -7
     }
 }
 

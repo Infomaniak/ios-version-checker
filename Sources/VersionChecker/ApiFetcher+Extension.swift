@@ -36,10 +36,6 @@ extension ApiFetcher {
 
     func version() async throws -> Version {
         let endpoint = Endpoint.version(store: .appleStore, platform: .ios, appName: "com.infomaniak.mail")
-
-        let response = await AF.request(endpoint.url).serializingDecodable(ResponseVersion.self,
-                                                                           automaticallyCancelling: true,
-                                                                           decoder: versionDecoder).response
-        return try response.result.get().data
+        return try await perform(request: AF.request(endpoint.url), decoder: versionDecoder).data
     }
 }

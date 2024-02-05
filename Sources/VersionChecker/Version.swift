@@ -18,11 +18,6 @@
 
 import Foundation
 
-struct ResponseVersion: Codable {
-    var result: String
-    var data: Version
-}
-
 struct Version: Codable {
     var id: Int
     var name: String
