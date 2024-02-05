@@ -1,3 +1,4 @@
+
 /*
  Infomaniak Version Checker - iOS
  Copyright (C) 2024 Infomaniak Network SA
@@ -15,21 +16,3 @@
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-import Foundation
-import InfomaniakCore
-
-extension UserDefaults.Keys {
-    static let lastRequestVersion = UserDefaults.Keys(rawValue: "lastRequestVersion")
-}
-
-extension UserDefaults {
-    var lastRequestVersion: String? {
-        get {
-            return string(forKey: key(.lastRequestVersion))
-        }
-        set {
-            set(newValue, forKey: key(.lastRequestVersion))
-        }
-    }
-}
