@@ -35,20 +35,11 @@ struct Version: Codable {
 
 struct PublishedVersion: Codable {
     var tag: String
-    var tagUpdatedAt: String
+    var tagUpdatedAt: Date
     var versionChangelog: String
     var type: VersionType
     var buildVersion: String
     var buildMinOsVersion: String
-
-    enum CodingKeys: String, CodingKey {
-        case tag
-        case tagUpdatedAt
-        case versionChangelog
-        case type
-        case buildVersion
-        case buildMinOsVersion
-    }
 }
 
 enum Store: String, Codable {

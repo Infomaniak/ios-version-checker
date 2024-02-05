@@ -18,10 +18,10 @@
 
 import Foundation
 
-extension String {
-    func toDate() -> Date? {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        return dateFormatter.date(from: self)
-    }
+enum Constants {
+    static let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        return formatter
+    }()
 }

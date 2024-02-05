@@ -30,6 +30,7 @@ extension ApiFetcher {
     var versionDecoder: JSONDecoder {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
+        decoder.dateDecodingStrategy = .formatted(Constants.dateFormatter)
         return decoder
     }
 
