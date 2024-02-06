@@ -17,7 +17,8 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/Infomaniak/ios-core", .upToNextMajor(from: "4.1.24"))
+        .package(url: "https://github.com/Infomaniak/ios-core", .upToNextMajor(from: "6.2.0")),
+        .package(url: "https://github.com/Infomaniak/ios-core-ui", .upToNextMajor(from: "4.1.0"))
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -25,7 +26,8 @@ let package = Package(
         .target(
             name: "VersionChecker",
             dependencies: [
-                .product(name: "InfomaniakCore", package: "ios-core")
+                .product(name: "InfomaniakCore", package: "ios-core"),
+                .product(name: "InfomaniakCoreUI", package: "ios-core-ui")
             ]
         ),
         .testTarget(

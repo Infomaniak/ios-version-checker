@@ -23,8 +23,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Infomaniak/ios-core",
       "state" : {
-        "revision" : "02f54f97557ea8340df63649081e39faddd8af26",
-        "version" : "4.1.29"
+        "revision" : "a1689a335a84f1396816d25955cfcd2069be62ae",
+        "version" : "6.2.0"
+      }
+    },
+    {
+      "identity" : "ios-core-ui",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Infomaniak/ios-core-ui",
+      "state" : {
+        "revision" : "d593bdc3d788cadc8856137ff6d2cffbfd707163",
+        "version" : "4.1.0"
       }
     },
     {
@@ -32,8 +41,44 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Infomaniak/ios-dependency-injection",
       "state" : {
-        "revision" : "b4d872b5baf5d6f19b98fdfd765205c57870d02e",
-        "version" : "1.1.11"
+        "revision" : "8dc9e67e6d3d9f4f5bd02d693a7ce1f93b125bcd",
+        "version" : "2.0.1"
+      }
+    },
+    {
+      "identity" : "ios-login",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Infomaniak/ios-login",
+      "state" : {
+        "revision" : "94dee9d95d92c5fbe152476b78b04985fbddaa7c",
+        "version" : "6.0.1"
+      }
+    },
+    {
+      "identity" : "kingfisher",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/onevcat/Kingfisher",
+      "state" : {
+        "revision" : "3ec0ab0bca4feb56e8b33e289c9496e89059dd08",
+        "version" : "7.10.2"
+      }
+    },
+    {
+      "identity" : "localizekit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Infomaniak/LocalizeKit",
+      "state" : {
+        "revision" : "a8f5b63a242a7cb5d8939db011fc9ee871a2a300",
+        "version" : "1.0.1"
+      }
+    },
+    {
+      "identity" : "matomo-sdk-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/matomo-org/matomo-sdk-ios",
+      "state" : {
+        "revision" : "15a645e11eaa8053f93749d73ced03da1e56fd01",
+        "version" : "7.5.2"
       }
     },
     {
@@ -61,6 +106,24 @@
       "state" : {
         "revision" : "b847a202a517a90763e8fd0656d8028aeee7b78d",
         "version" : "8.20.0"
+      }
+    },
+    {
+      "identity" : "snackbar.swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Infomaniak/SnackBar.swift",
+      "state" : {
+        "revision" : "7d8d20af50c6b744aa9791b597f7efbd0a15add2",
+        "version" : "1.2.0"
+      }
+    },
+    {
+      "identity" : "snapkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SnapKit/SnapKit.git",
+      "state" : {
+        "revision" : "e74fe2a978d1216c3602b129447c7301573cc2d8",
+        "version" : "5.7.0"
       }
     },
     {
