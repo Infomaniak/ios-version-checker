@@ -27,7 +27,7 @@ extension Endpoint {
 }
 
 extension ApiFetcher {
-    var versionDecoder: JSONDecoder {
+    private var versionDecoder: JSONDecoder {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         decoder.dateDecodingStrategy = .formatted(Constants.dateFormatter)

@@ -20,35 +20,43 @@ import Alamofire
 import Foundation
 import InfomaniakCore
 
+public enum VersionStatus {
+    case updateIsRequired, canBeUpdated, isUpToDate
+}
+
 public struct VersionChecker {
     public static let standard = VersionChecker()
     private let appLaunchCounter = AppLaunchCounter()
 
-    public func showUpdateVersion() async throws -> Bool {
+    public func checkAppVersionStatus() async throws -> VersionStatus {
         let apiFetcher = ApiFetcher()
         let version = try await apiFetcher.version()
 
-        let publishedVersion = version.publishedVersions
-            .first(where: { $0.type == (Bundle.main.isRunningInTestFlight ? .beta : .production) })
-
-        guard let publishedVersion,
-              try await appNeedUpdate(publishedVersion: publishedVersion),
-              shouldAskForUpdate(publishedVersion: publishedVersion) else {
-            return false
+        guard let currentInstalledVersion = getCurrentInstalledVersion() else {
+            return .isUpToDate
         }
 
-        VersionChecker.lastRequestVersion = versionFrom(publishedVersion: publishedVersion)
-        return true
+        //VersionChecker.lastRequestVersion = versionFrom(publishedVersion: publishedVersion)
+
+        guard !appMustBeUpdated(installedVersion: currentInstalledVersion.tag, minimumVersion: version.minVersion) else {
+            return .updateIsRequired
+        }
+
+        let publishedVersion = version.publishedVersions.first { $0.type == (Bundle.main.isRunningInTestFlight ? .beta : .production) }
+        guard let publishedVersion, appCanBeUpdated(publishedVersion: publishedVersion), shouldAskForUpdate(publishedVersion: publishedVersion) else {
+            return .isUpToDate
+        }
+
+        return .canBeUpdated
     }
 
-    private func appNeedUpdate(publishedVersion: PublishedVersion) async throws -> Bool {
-        guard let currentTag = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String,
-              let currentBuild = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String else {
-            // We don't have any version to compare
-            return false
-        }
+    private func appMustBeUpdated(installedVersion: String, minimumVersion: String) -> Bool {
+        return installedVersion.compare(minimumVersion, options: .numeric) == .orderedAscending
+    }
 
-        let currentVersion = versionFrom(tag: currentTag, build: currentBuild)
+    private func appCanBeUpdated(publishedVersion: PublishedVersion) -> Bool {
+        guard let (tag, build) = getCurrentInstalledVersion() else { return false }
+        let currentVersion = versionFrom(tag: tag, build: build)
         let latestVersion = versionFrom(publishedVersion: publishedVersion)
 
         return currentVersion.compare(latestVersion, options: .numeric) == .orderedAscending
@@ -91,6 +99,15 @@ extension VersionChecker {
 // MARK: - Utils
 
 extension VersionChecker {
+    private func getCurrentInstalledVersion() -> (tag: String, build: String)? {
+        guard let currentTag = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String,
+              let currentBuild = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String else {
+            return nil
+        }
+
+        return (currentTag, currentBuild)
+    }
+
     private func versionFrom(tag: String, build: String) -> String {
         return "\(tag) - \(build)"
     }
