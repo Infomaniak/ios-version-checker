@@ -26,28 +26,26 @@ public enum VersionStatus {
 
 public struct VersionChecker {
     public static let standard = VersionChecker()
+
     private let appLaunchCounter = AppLaunchCounter()
 
     public func checkAppVersionStatus() async throws -> VersionStatus {
         let apiFetcher = ApiFetcher()
         let version = try await apiFetcher.version()
 
-        guard let currentInstalledVersion = getCurrentInstalledVersion() else {
-            return .isUpToDate
-        }
+        guard let installedVersion = VersionUtils.getCurrentlyInstalledVersion() else { return .isUpToDate }
 
-        //VersionChecker.lastRequestVersion = versionFrom(publishedVersion: publishedVersion)
-
-        guard !appMustBeUpdated(installedVersion: currentInstalledVersion.tag, minimumVersion: version.minVersion) else {
+        if appMustBeUpdated(installedVersion: installedVersion.tag, minimumVersion: version.minVersion) {
             return .updateIsRequired
         }
 
-        let publishedVersion = version.publishedVersions.first { $0.type == (Bundle.main.isRunningInTestFlight ? .beta : .production) }
-        guard let publishedVersion, appCanBeUpdated(publishedVersion: publishedVersion), shouldAskForUpdate(publishedVersion: publishedVersion) else {
-            return .isUpToDate
+        if let publishedVersion = version.latestPublishedVersion,
+           appCanBeUpdated(publishedVersion: publishedVersion) && shouldAskForUpdate(publishedVersion: publishedVersion) {
+            VersionChecker.lastRequestVersion = VersionUtils.versionFrom(publishedVersion: publishedVersion)
+            return .canBeUpdated
         }
 
-        return .canBeUpdated
+        return .isUpToDate
     }
 
     private func appMustBeUpdated(installedVersion: String, minimumVersion: String) -> Bool {
@@ -55,9 +53,9 @@ public struct VersionChecker {
     }
 
     private func appCanBeUpdated(publishedVersion: PublishedVersion) -> Bool {
-        guard let (tag, build) = getCurrentInstalledVersion() else { return false }
-        let currentVersion = versionFrom(tag: tag, build: build)
-        let latestVersion = versionFrom(publishedVersion: publishedVersion)
+        guard let (tag, build) = VersionUtils.getCurrentlyInstalledVersion() else { return false }
+        let currentVersion = VersionUtils.versionFrom(tag: tag, build: build)
+        let latestVersion = VersionUtils.versionFrom(publishedVersion: publishedVersion)
 
         return currentVersion.compare(latestVersion, options: .numeric) == .orderedAscending
     }
@@ -88,31 +86,6 @@ extension VersionChecker {
     }
 
     private func newVersionIsDifferent(publishedVersion: PublishedVersion) -> Bool {
-        return versionFrom(publishedVersion: publishedVersion) != VersionChecker.lastRequestVersion && isTooOld(version: publishedVersion)
-    }
-
-    private func isTooOld(version: PublishedVersion) -> Bool {
-        return Calendar.current.numberOfDaysBetween(Date(), and: version.tagUpdatedAt) <= -7
-    }
-}
-
-// MARK: - Utils
-
-extension VersionChecker {
-    private func getCurrentInstalledVersion() -> (tag: String, build: String)? {
-        guard let currentTag = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String,
-              let currentBuild = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String else {
-            return nil
-        }
-
-        return (currentTag, currentBuild)
-    }
-
-    private func versionFrom(tag: String, build: String) -> String {
-        return "\(tag) - \(build)"
-    }
-
-    private func versionFrom(publishedVersion: PublishedVersion) -> String {
-        return versionFrom(tag: publishedVersion.tag, build: publishedVersion.buildVersion)
+        return VersionUtils.versionFrom(publishedVersion: publishedVersion) != VersionChecker.lastRequestVersion && publishedVersion.isTooOld
     }
 }

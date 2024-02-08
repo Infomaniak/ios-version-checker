@@ -18,14 +18,9 @@
 
 import Foundation
 
-struct Version: Codable {
-    var id: Int
-    var name: String
-    var platform: Platform
-    var store: Store
-    var apiId: String
-    var minVersion: String
-    var publishedVersions: [PublishedVersion]
+enum VersionType: String, Codable {
+    case production
+    case beta
 }
 
 struct PublishedVersion: Codable {
@@ -35,17 +30,8 @@ struct PublishedVersion: Codable {
     var type: VersionType
     var buildVersion: String
     var buildMinOsVersion: String
-}
 
-enum Store: String, Codable {
-    case appleStore = "apple-store"
-}
-
-enum Platform: String, Codable {
-    case ios
-}
-
-enum VersionType: String, Codable {
-    case production
-    case beta
+    var isTooOld: Bool {
+        return Calendar.current.numberOfDaysBetween(Date(), and: tagUpdatedAt) <= -7
+    }
 }
