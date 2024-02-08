@@ -28,19 +28,19 @@ public struct VersionChecker {
     public static let standard = VersionChecker()
 
     private let appLaunchCounter = AppLaunchCounter()
-
+    
+    /// Checks if the app is up to date, can be updated or if it is outdated and must be updated
+    /// - Returns: The status of the current version of the app
     public func checkAppVersionStatus() async throws -> VersionStatus {
         let apiFetcher = ApiFetcher()
         let version = try await apiFetcher.version()
 
-        guard let installedVersion = VersionUtils.getCurrentlyInstalledVersion() else { return .isUpToDate }
-
-        if appMustBeUpdated(installedVersion: installedVersion.tag, minimumVersion: version.minVersion) {
+        if isAppOutdated(minimumVersion: version.minVersion) {
             return .updateIsRequired
         }
 
         if let publishedVersion = version.latestPublishedVersion,
-           appCanBeUpdated(publishedVersion: publishedVersion) && shouldAskForUpdate(publishedVersion: publishedVersion) {
+           appCanBeUpdated(publishedVersion: publishedVersion) && shouldAskUserToUpdate(publishedVersion: publishedVersion) {
             VersionChecker.lastRequestVersion = VersionUtils.versionFrom(publishedVersion: publishedVersion)
             return .canBeUpdated
         }
@@ -48,8 +48,9 @@ public struct VersionChecker {
         return .isUpToDate
     }
 
-    private func appMustBeUpdated(installedVersion: String, minimumVersion: String) -> Bool {
-        return installedVersion.compare(minimumVersion, options: .numeric) == .orderedAscending
+    private func isAppOutdated(minimumVersion: String) -> Bool {
+        guard let installedVersionTag = VersionUtils.getCurrentlyInstalledVersion()?.tag else { return false }
+        return installedVersionTag.compare(minimumVersion, options: .numeric) == .orderedAscending
     }
 
     private func appCanBeUpdated(publishedVersion: PublishedVersion) -> Bool {
@@ -60,7 +61,7 @@ public struct VersionChecker {
         return currentVersion.compare(latestVersion, options: .numeric) == .orderedAscending
     }
 
-    private func shouldAskForUpdate(publishedVersion: PublishedVersion) -> Bool {
+    private func shouldAskUserToUpdate(publishedVersion: PublishedVersion) -> Bool {
         return requestCounterIsValid || newVersionIsDifferent(publishedVersion: publishedVersion)
     }
 }
@@ -86,6 +87,7 @@ extension VersionChecker {
     }
 
     private func newVersionIsDifferent(publishedVersion: PublishedVersion) -> Bool {
-        return VersionUtils.versionFrom(publishedVersion: publishedVersion) != VersionChecker.lastRequestVersion && publishedVersion.isTooOld
+        return VersionUtils.versionFrom(publishedVersion: publishedVersion) != VersionChecker.lastRequestVersion
+            && publishedVersion.hasBeenPublishedLongEnough
     }
 }

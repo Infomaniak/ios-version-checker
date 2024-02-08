@@ -31,7 +31,7 @@ struct PublishedVersion: Codable {
     var buildVersion: String
     var buildMinOsVersion: String
 
-    var isTooOld: Bool {
+    var hasBeenPublishedLongEnough: Bool {
         return Calendar.current.numberOfDaysBetween(Date(), and: tagUpdatedAt) <= -7
     }
 }
