@@ -18,8 +18,9 @@
 
 import Foundation
 
-enum Platform: String, Codable {
+public enum Platform: String, Codable {
     case ios
+    case macOS = "mac-os"
 }
 
 enum Store: String, Codable {
