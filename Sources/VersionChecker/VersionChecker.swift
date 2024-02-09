@@ -20,41 +20,50 @@ import Alamofire
 import Foundation
 import InfomaniakCore
 
+public enum VersionStatus {
+    case updateIsRequired, canBeUpdated, isUpToDate
+}
+
 public struct VersionChecker {
     public static let standard = VersionChecker()
+
     private let appLaunchCounter = AppLaunchCounter()
+    
+    /// Checks if the app is up to date, can be updated or if it is outdated and must be updated
+    /// - Returns: The status of the current version of the app
+    public func checkAppVersionStatus(platform: Platform = .ios) async throws -> VersionStatus {
+        guard let bundleIdentifier = Bundle.main.bundleIdentifier else { return .isUpToDate }
 
-    public func showUpdateVersion() async throws -> Bool {
         let apiFetcher = ApiFetcher()
-        let version = try await apiFetcher.version()
+        let version = try await apiFetcher.version(appName: bundleIdentifier, platform: platform)
 
-        let publishedVersion = version.publishedVersions
-            .first(where: { $0.type == (Bundle.main.isRunningInTestFlight ? .beta : .production) })
-
-        guard let publishedVersion,
-              try await appNeedUpdate(publishedVersion: publishedVersion),
-              shouldAskForUpdate(publishedVersion: publishedVersion) else {
-            return false
+        if isAppOutdated(minimumVersion: version.minVersion) {
+            return .updateIsRequired
         }
 
-        VersionChecker.lastRequestVersion = versionFrom(publishedVersion: publishedVersion)
-        return true
+        if let publishedVersion = version.latestPublishedVersion,
+           appCanBeUpdated(publishedVersion: publishedVersion) && shouldAskUserToUpdate(publishedVersion: publishedVersion) {
+            VersionChecker.lastRequestVersion = VersionUtils.versionFrom(publishedVersion: publishedVersion)
+            return .canBeUpdated
+        }
+
+        return .isUpToDate
     }
 
-    private func appNeedUpdate(publishedVersion: PublishedVersion) async throws -> Bool {
-        guard let currentTag = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String,
-              let currentBuild = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String else {
-            // We don't have any version to compare
-            return false
-        }
+    private func isAppOutdated(minimumVersion: String) -> Bool {
+        guard let installedVersionTag = VersionUtils.getCurrentlyInstalledVersion()?.tag else { return false }
+        return installedVersionTag.compare(minimumVersion, options: .numeric) == .orderedAscending
+    }
 
-        let currentVersion = versionFrom(tag: currentTag, build: currentBuild)
-        let latestVersion = versionFrom(publishedVersion: publishedVersion)
+    private func appCanBeUpdated(publishedVersion: PublishedVersion) -> Bool {
+        guard let (tag, build) = VersionUtils.getCurrentlyInstalledVersion() else { return false }
+        let currentVersion = VersionUtils.versionFrom(tag: tag, build: build)
+        let latestVersion = VersionUtils.versionFrom(publishedVersion: publishedVersion)
 
         return currentVersion.compare(latestVersion, options: .numeric) == .orderedAscending
     }
 
-    private func shouldAskForUpdate(publishedVersion: PublishedVersion) -> Bool {
+    private func shouldAskUserToUpdate(publishedVersion: PublishedVersion) -> Bool {
         return requestCounterIsValid || newVersionIsDifferent(publishedVersion: publishedVersion)
     }
 }
@@ -80,23 +89,7 @@ extension VersionChecker {
     }
 
     private func newVersionIsDifferent(publishedVersion: PublishedVersion) -> Bool {
-        return versionFrom(publishedVersion: publishedVersion) != VersionChecker.lastRequestVersion && isTooOld(version: publishedVersion)
-    }
-
-    private func isTooOld(version: PublishedVersion) -> Bool {
-        let publishedDate = version.tagUpdatedAt.toDate() ?? Date()
-        return Calendar.current.numberOfDaysBetween(Date(), and: publishedDate) <= -7
-    }
-}
-
-// MARK: - Utils
-
-extension VersionChecker {
-    private func versionFrom(tag: String, build: String) -> String {
-        return "\(tag) - \(build)"
-    }
-
-    private func versionFrom(publishedVersion: PublishedVersion) -> String {
-        return versionFrom(tag: publishedVersion.tag, build: publishedVersion.buildVersion)
+        return VersionUtils.versionFrom(publishedVersion: publishedVersion) != VersionChecker.lastRequestVersion
+            && publishedVersion.hasBeenPublishedLongEnough
     }
 }

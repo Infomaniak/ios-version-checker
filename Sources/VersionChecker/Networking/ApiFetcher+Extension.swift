@@ -27,18 +27,15 @@ extension Endpoint {
 }
 
 extension ApiFetcher {
-    var versionDecoder: JSONDecoder {
+    private var versionDecoder: JSONDecoder {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
+        decoder.dateDecodingStrategy = .formatted(Constants.dateFormatter)
         return decoder
     }
 
-    func version() async throws -> Version {
-        let endpoint = Endpoint.version(store: .appleStore, platform: .ios, appName: "com.infomaniak.mail")
-
-        let response = await AF.request(endpoint.url).serializingDecodable(ResponseVersion.self,
-                                                                           automaticallyCancelling: true,
-                                                                           decoder: versionDecoder).response
-        return try response.result.get().data
+    func version(appName: String, platform: Platform) async throws -> Version {
+        let endpoint = Endpoint.version(store: .appleStore, platform: platform, appName: appName)
+        return try await perform(request: AF.request(endpoint.url), decoder: versionDecoder).data
     }
 }

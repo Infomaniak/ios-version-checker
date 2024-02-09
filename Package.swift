@@ -7,7 +7,7 @@ let package = Package(
     name: "VersionChecker",
     defaultLocalization: "en",
     platforms: [
-        .iOS(.v15)
+        .iOS(.v13)
     ],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
@@ -17,7 +17,7 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/Infomaniak/ios-core", .upToNextMajor(from: "4.1.24"))
+        .package(url: "https://github.com/Infomaniak/ios-core", .upToNextMajor(from: "6.2.0"))
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.

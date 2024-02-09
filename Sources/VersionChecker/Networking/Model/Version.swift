@@ -18,9 +18,13 @@
 
 import Foundation
 
-struct ResponseVersion: Codable {
-    var result: String
-    var data: Version
+public enum Platform: String, Codable {
+    case ios
+    case macOS = "mac-os"
+}
+
+enum Store: String, Codable {
+    case appleStore = "apple-store"
 }
 
 struct Version: Codable {
@@ -31,35 +35,8 @@ struct Version: Codable {
     var apiId: String
     var minVersion: String
     var publishedVersions: [PublishedVersion]
-}
 
-struct PublishedVersion: Codable {
-    var tag: String
-    var tagUpdatedAt: String
-    var versionChangelog: String
-    var type: VersionType
-    var buildVersion: String
-    var buildMinOsVersion: String
-
-    enum CodingKeys: String, CodingKey {
-        case tag
-        case tagUpdatedAt
-        case versionChangelog
-        case type
-        case buildVersion
-        case buildMinOsVersion
+    var latestPublishedVersion: PublishedVersion? {
+        publishedVersions.first { $0.type == (Bundle.main.isRunningInTestFlight ? .beta : .production) }
     }
-}
-
-enum Store: String, Codable {
-    case appleStore = "apple-store"
-}
-
-enum Platform: String, Codable {
-    case ios
-}
-
-enum VersionType: String, Codable {
-    case production
-    case beta
 }

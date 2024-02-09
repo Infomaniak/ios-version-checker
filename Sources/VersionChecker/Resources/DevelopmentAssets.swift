@@ -16,12 +16,12 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import Foundation
+import SwiftUI
 
-extension String {
-    func toDate() -> Date? {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        return dateFormatter.date(from: self)
-    }
+struct DevelopmentAssets {
+    static let image = Image(systemName: "shared.with.you")
+
+    static let background = Color(red: 1, green: 1, blue: 1)
+    static let primaryButtonColor = Color(red: 0.73, green: 0, blue: 0.33)
+    static let secondaryButtonColor = Color(red: 0.996, green: 0.972, blue: 0.969)
 }
