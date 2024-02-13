@@ -28,6 +28,11 @@ enum VersionUtils {
         return (tag, build)
     }
 
+    static func getFormattedOSVersion() -> String {
+        let version = ProcessInfo().operatingSystemVersion
+        return "\(version.majorVersion).\(version.minorVersion)"
+    }
+
     static func versionFrom(tag: String, build: String) -> String {
         return "\(tag) - \(build)"
     }

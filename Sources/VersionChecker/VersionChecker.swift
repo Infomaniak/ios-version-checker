@@ -28,7 +28,7 @@ public struct VersionChecker {
     public static let standard = VersionChecker()
 
     private let appLaunchCounter = AppLaunchCounter()
-    
+
     /// Checks if the app is up to date, can be updated or if it is outdated and must be updated
     /// - Returns: The status of the current version of the app
     public func checkAppVersionStatus(platform: Platform = .ios) async throws -> VersionStatus {
@@ -37,12 +37,13 @@ public struct VersionChecker {
         let apiFetcher = ApiFetcher()
         let version = try await apiFetcher.version(appName: bundleIdentifier, platform: platform)
 
-        if isAppOutdated(minimumVersion: version.minVersion) {
+        guard let publishedVersion = version.latestPublishedVersion else { return .isUpToDate }
+
+        if isAppOutdated(minimumAppVersion: version.minVersion, minimumOSVersion: publishedVersion.buildMinOsVersion) {
             return .updateIsRequired
         }
 
-        if let publishedVersion = version.latestPublishedVersion,
-           appCanBeUpdated(publishedVersion: publishedVersion) && shouldAskUserToUpdate(publishedVersion: publishedVersion) {
+        if appCanBeUpdated(publishedVersion: publishedVersion) && shouldAskUserToUpdate(publishedVersion: publishedVersion) {
             VersionChecker.lastRequestVersion = VersionUtils.versionFrom(publishedVersion: publishedVersion)
             return .canBeUpdated
         }
@@ -50,9 +51,14 @@ public struct VersionChecker {
         return .isUpToDate
     }
 
-    private func isAppOutdated(minimumVersion: String) -> Bool {
+    private func isAppOutdated(minimumAppVersion: String, minimumOSVersion: String) -> Bool {
         guard let installedVersionTag = VersionUtils.getCurrentlyInstalledVersion()?.tag else { return false }
-        return installedVersionTag.compare(minimumVersion, options: .numeric) == .orderedAscending
+
+        let isOutdated = installedVersionTag.compare(minimumAppVersion, options: .numeric) == .orderedAscending
+        let isOSSupported = VersionUtils.getFormattedOSVersion()
+            .compare(minimumOSVersion, options: .numeric) == .orderedDescending
+
+        return isOutdated && isOSSupported
     }
 
     private func appCanBeUpdated(publishedVersion: PublishedVersion) -> Bool {
