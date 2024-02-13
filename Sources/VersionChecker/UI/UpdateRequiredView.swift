@@ -99,6 +99,7 @@ public struct UpdateRequiredView: View {
         }
         .padding(.horizontal, 24)
         .padding(.bottom, 16)
+        .background(sharedStyle.background.edgesIgnoringSafeArea(.all))
     }
 }
 
