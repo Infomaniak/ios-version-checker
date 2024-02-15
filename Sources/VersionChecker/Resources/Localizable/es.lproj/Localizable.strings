@@ -19,5 +19,5 @@
 /* Update Required */
 
 "updateRequiredTitle" = "Actualización requerida";
-"updateRequiredDescription" = "Su aplicación ya no es compatible. Instale la última versión y disfrute de las últimas mejoras y nuevas funciones.";
+"updateRequiredDescription" = "Su versión de la aplicación ya no es compatible.\nInstale la última versión y aproveche las últimas mejoras y nuevas funciones.";
 "updateRequiredButton" = "Actualizar";
