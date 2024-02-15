@@ -32,7 +32,7 @@ public struct VersionChecker {
     /// Checks if the app is up to date, can be updated or if it is outdated and must be updated
     /// - Returns: The status of the current version of the app
     public func checkAppVersionStatus(platform: Platform = .ios) async throws -> VersionStatus {
-        guard let bundleIdentifier = Bundle.main.bundleIdentifier else { return .isUpToDate }
+        guard let bundleIdentifier = Bundle.main.appIdentifier else { return .isUpToDate }
 
         let apiFetcher = ApiFetcher()
         let version = try await apiFetcher.version(appName: bundleIdentifier, platform: platform)

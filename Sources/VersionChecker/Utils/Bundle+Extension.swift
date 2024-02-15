@@ -27,4 +27,10 @@ extension Bundle {
 
         return path.contains("sandboxReceipt")
     }
+
+    var appIdentifier: String? {
+        guard let identifier = bundleIdentifier else { return nil }
+        let parts = identifier.split(separator: ".")
+        return parts.prefix(3).joined(separator: ".")
+    }
 }
