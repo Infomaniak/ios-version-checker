@@ -59,47 +59,66 @@ public struct TemplateSharedStyle {
 public struct UpdateRequiredView: View {
     public let image: Image
     public let sharedStyle: TemplateSharedStyle
-    public let handler: () -> Void
+    public let updateHandler: () -> Void
+    public let dismissHandler: (() -> Void)?
 
-    public init(image: Image, sharedStyle: TemplateSharedStyle, handler: @escaping () -> Void) {
+    public init(
+        image: Image,
+        sharedStyle: TemplateSharedStyle,
+        updateHandler: @escaping () -> Void,
+        dismissHandler: (() -> Void)? = nil
+    ) {
         self.image = image
         self.sharedStyle = sharedStyle
-        self.handler = handler
+        self.updateHandler = updateHandler
+        self.dismissHandler = dismissHandler
     }
 
     public var body: some View {
-        VStack(spacing: 32) {
+        ZStack {
             VStack(spacing: 32) {
-                image
-                    .resizable()
-                    .scaledToFit()
+                VStack(spacing: 32) {
+                    image
+                        .resizable()
+                        .scaledToFit()
 
-                Text("updateRequiredTitle", bundle: .module)
-                    .font(sharedStyle.titleTextStyle.font)
-                    .foregroundColor(sharedStyle.titleTextStyle.color)
+                    Text("updateRequiredTitle", bundle: .module)
+                        .font(sharedStyle.titleTextStyle.font)
+                        .foregroundColor(sharedStyle.titleTextStyle.color)
 
-                Text("updateRequiredDescription", bundle: .module)
-                    .font(sharedStyle.descriptionTextStyle.font)
-                    .foregroundColor(sharedStyle.descriptionTextStyle.color)
-                    .multilineTextAlignment(.center)
+                    Text("updateRequiredDescription", bundle: .module)
+                        .font(sharedStyle.descriptionTextStyle.font)
+                        .foregroundColor(sharedStyle.descriptionTextStyle.color)
+                        .multilineTextAlignment(.center)
+                }
+                .frame(maxWidth: 496, maxHeight: .infinity)
+
+                Button(action: updateHandler) {
+                    Text("updateRequiredButton", bundle: .module)
+                        .font(sharedStyle.buttonStyle.textStyle.font)
+                        .foregroundColor(sharedStyle.buttonStyle.textStyle.color)
+                        .frame(maxWidth: 496)
+                        .frame(height: sharedStyle.buttonStyle.height)
+                        .background(
+                            RoundedRectangle(cornerRadius: sharedStyle.buttonStyle.radius)
+                                .fill(sharedStyle.buttonStyle.background)
+                        )
+                }
             }
-            .frame(maxWidth: 496, maxHeight: .infinity)
+            .padding(.horizontal, 24)
+            .padding(.bottom, 16)
+            .background(sharedStyle.background.edgesIgnoringSafeArea(.all))
 
-            Button(action: handler) {
-                Text("updateRequiredButton", bundle: .module)
-                    .font(sharedStyle.buttonStyle.textStyle.font)
-                    .foregroundColor(sharedStyle.buttonStyle.textStyle.color)
-                    .frame(maxWidth: 496)
-                    .frame(height: sharedStyle.buttonStyle.height)
-                    .background(
-                        RoundedRectangle(cornerRadius: sharedStyle.buttonStyle.radius)
-                            .fill(sharedStyle.buttonStyle.background)
-                    )
+            if let dismissHandler {
+                Button(action: dismissHandler) {
+                    Image(systemName: "xmark")
+                        .font(.system(size: 22, weight: .light))
+                        .foregroundColor(sharedStyle.buttonStyle.background)
+                }
+                .padding([.top, .leading], 16)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             }
         }
-        .padding(.horizontal, 24)
-        .padding(.bottom, 16)
-        .background(sharedStyle.background.edgesIgnoringSafeArea(.all))
     }
 }
 
@@ -115,5 +134,10 @@ public struct UpdateRequiredView: View {
         buttonStyle: .init(background: DevelopmentAssets.primaryButtonColor, textStyle: bodyButton, height: 56, radius: 16)
     )
 
-    return UpdateRequiredView(image: DevelopmentAssets.image, sharedStyle: customStyle) { /* Update Handler */ }
+    return UpdateRequiredView(image: DevelopmentAssets.image, sharedStyle: customStyle) {
+        /* Update Handler */
+    } dismissHandler: {
+        /* Dismiss Handler */
+    }
+
 }
