@@ -37,15 +37,15 @@ public struct VersionChecker {
         let apiFetcher = ApiFetcher()
         let version = try await apiFetcher.version(appName: bundleIdentifier, platform: platform)
 
-        guard let publishedVersion = version.latestPublishedVersion,
-              isOSSupported(minimumOSVersion: publishedVersion.buildMinOsVersion) else { return .isUpToDate }
+        guard let latestPublishedVersion = version.latestPublishedVersionForCurrentType,
+              isOSSupported(minimumOSVersion: latestPublishedVersion.buildMinOsVersion) else { return .isUpToDate }
 
-        if isAppOutdated(minimumAppVersion: version.minVersion) {
+        if isAppOutdated(version: version) {
             return .updateIsRequired
         }
 
-        if appCanBeUpdated(publishedVersion: publishedVersion) && shouldAskUserToUpdate(publishedVersion: publishedVersion) {
-            VersionChecker.lastRequestVersion = VersionUtils.versionFrom(publishedVersion: publishedVersion)
+        if appCanBeUpdated(publishedVersion: latestPublishedVersion) && shouldAskUserToUpdate(publishedVersion: latestPublishedVersion) {
+            VersionChecker.lastRequestVersion = VersionUtils.versionFrom(publishedVersion: latestPublishedVersion)
             return .canBeUpdated
         }
 
@@ -53,12 +53,16 @@ public struct VersionChecker {
     }
 
     private func isOSSupported(minimumOSVersion: String) -> Bool {
-        return VersionUtils.getFormattedOSVersion().compare(minimumOSVersion, options: .numeric) == .orderedDescending
+        return minimumOSVersion.compare(VersionUtils.getFormattedOSVersion(), options: .numeric) == .orderedAscending
     }
 
-    private func isAppOutdated(minimumAppVersion: String) -> Bool {
-        guard let installedVersionTag = VersionUtils.getCurrentlyInstalledVersion()?.tag else { return false }
-        return installedVersionTag.compare(minimumAppVersion, options: .numeric) == .orderedAscending
+    private func isAppOutdated(version: Version) -> Bool {
+        guard let installedVersionTag = VersionUtils.getCurrentlyInstalledVersion()?.tag,
+              let latestProductionVersion = version.getLatestPublishedVersion(for: .production),
+              version.minVersion.compare(latestProductionVersion.tag, options: .numeric) == .orderedAscending
+        else { return false }
+
+        return installedVersionTag.compare(version.minVersion, options: .numeric) == .orderedAscending
     }
 
     private func appCanBeUpdated(publishedVersion: PublishedVersion) -> Bool {

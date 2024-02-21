@@ -36,7 +36,11 @@ struct Version: Codable {
     var minVersion: String
     var publishedVersions: [PublishedVersion]
 
-    var latestPublishedVersion: PublishedVersion? {
-        publishedVersions.first { $0.type == (Bundle.main.isRunningInTestFlight ? .beta : .production) }
+    var latestPublishedVersionForCurrentType: PublishedVersion? {
+        getLatestPublishedVersion(for: Bundle.main.isRunningInTestFlight ? .beta : .production)
+    }
+
+    func getLatestPublishedVersion(for type: VersionType) -> PublishedVersion? {
+        return publishedVersions.first { $0.type == type }
     }
 }
