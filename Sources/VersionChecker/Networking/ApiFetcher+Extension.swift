@@ -36,6 +36,6 @@ extension ApiFetcher {
 
     func version(appName: String, platform: Platform) async throws -> Version {
         let endpoint = Endpoint.version(store: .appleStore, platform: platform, appName: appName)
-        return try await perform(request: AF.request(endpoint.url), decoder: versionDecoder).data
+        return try await perform(request: AF.request(endpoint.url), decoder: versionDecoder)
     }
 }
