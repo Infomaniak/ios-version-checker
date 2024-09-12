@@ -22,7 +22,8 @@ import InfomaniakCore
 
 extension Endpoint {
     static func version(store: Store, platform: Platform, appName: String) -> Endpoint {
-        return Endpoint(path: "/1/app-information/versions/\(store.rawValue)/\(platform.rawValue)/\(appName)")
+        let fields = "id,min_version,published_versions.build_min_os_version"
+        return Endpoint(path: "/1/app-information/versions/\(store.rawValue)/\(platform.rawValue)/\(appName)?only=\(fields)")
     }
 }
 
