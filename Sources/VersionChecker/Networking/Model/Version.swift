@@ -28,10 +28,6 @@ enum Store: String, Codable {
 }
 
 struct Version: Codable {
-    var id: Int
-    var name: String
-    var platform: Platform
-    var store: Store
     var apiId: String
     var minVersion: String
     var publishedVersions: [PublishedVersion]
