@@ -17,6 +17,7 @@
  */
 
 import Foundation
+import InfomaniakCore
 
 public enum Platform: String, Codable {
     case ios
@@ -28,15 +29,15 @@ enum Store: String, Codable {
 }
 
 struct Version: Codable {
-    var apiId: String
     var minVersion: String
     var publishedVersions: [PublishedVersion]
 
-    var latestPublishedVersionForCurrentType: PublishedVersion? {
-        getLatestPublishedVersion(for: Bundle.main.isRunningInTestFlight ? .beta : .production)
+    var latestPublishedVersion: PublishedVersion? {
+        return publishedVersions.first
     }
-
-    func getLatestPublishedVersion(for type: VersionType) -> PublishedVersion? {
-        return publishedVersions.first { $0.type == type }
-    }
+    
+    static func fetchLatestVersion(for store: Store, platform: Platform, appName: String) -> Endpoint {
+            let versionType: VersionType = Bundle.main.isRunningInTestFlight ? .beta : .production
+            return Endpoint.version(store: store, platform: platform, appName: appName, versionType: versionType)
+        }
 }

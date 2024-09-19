@@ -21,9 +21,13 @@ import Foundation
 import InfomaniakCore
 
 extension Endpoint {
-    static func version(store: Store, platform: Platform, appName: String) -> Endpoint {
+    static func version(store: Store, platform: Platform, appName: String, versionType: VersionType) -> Endpoint {
         return Endpoint(path: "/1/app-information/versions/\(store.rawValue)/\(platform.rawValue)/\(appName)", queryItems: [
-            URLQueryItem(name: "only", value: "platform,min_version,name,published_versions.tag,published_versions.tag_updated_at,published_versions.build_version,published_versions.build_min_os_version")
+            URLQueryItem(
+                name: "only",
+                value: "min_version,published_versions.tag,published_versions.tag_updated_at,published_versions.build_version,published_versions.build_min_os_version"
+            ),
+            URLQueryItem(name: "filter_versions[]", value: versionType.rawValue)
         ])
     }
 }
@@ -36,8 +40,8 @@ extension ApiFetcher {
         return decoder
     }
 
-    func version(appName: String, platform: Platform) async throws -> Version {
-        let endpoint = Endpoint.version(store: .appleStore, platform: platform, appName: appName)
+    func version(appName: String, platform: Platform, versionType: VersionType) async throws -> Version {
+        let endpoint = Endpoint.version(store: .appleStore, platform: platform, appName: appName, versionType: versionType)
         return try await perform(request: AF.request(endpoint.url), decoder: versionDecoder)
     }
 }

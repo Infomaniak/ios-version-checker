@@ -35,9 +35,10 @@ public struct VersionChecker {
         guard let bundleIdentifier = Bundle.main.appIdentifier else { return .isUpToDate }
 
         let apiFetcher = ApiFetcher()
-        let version = try await apiFetcher.version(appName: bundleIdentifier, platform: platform)
+        let versionType: VersionType = Bundle.main.isRunningInTestFlight ? .beta : .production
+        let version = try await apiFetcher.version(appName: bundleIdentifier, platform: platform, versionType: versionType)
 
-        guard let latestPublishedVersion = version.latestPublishedVersionForCurrentType,
+        guard let latestPublishedVersion = version.latestPublishedVersion,
               isOSSupported(minimumOSVersion: latestPublishedVersion.buildMinOsVersion) else { return .isUpToDate }
 
         if isAppOutdated(version: version) {
@@ -58,12 +59,11 @@ public struct VersionChecker {
 
     private func isAppOutdated(version: Version) -> Bool {
         guard let installedVersionTag = VersionUtils.getCurrentlyInstalledVersion()?.tag,
-              let latestProductionVersion = version.getLatestPublishedVersion(for: .production),
-              version.minVersion.compare(latestProductionVersion.tag, options: .numeric) == .orderedAscending
-        else { return false }
+                      let latestPublishedVersion = version.latestPublishedVersion
+                else { return false }
 
-        return installedVersionTag.compare(version.minVersion, options: .numeric) == .orderedAscending
-    }
+                return installedVersionTag.compare(version.minVersion, options: .numeric) == .orderedAscending
+            }
 
     private func appCanBeUpdated(publishedVersion: PublishedVersion) -> Bool {
         guard let (tag, build) = VersionUtils.getCurrentlyInstalledVersion() else { return false }

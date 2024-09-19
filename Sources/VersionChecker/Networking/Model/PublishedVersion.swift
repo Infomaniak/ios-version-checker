@@ -26,7 +26,6 @@ enum VersionType: String, Codable {
 struct PublishedVersion: Codable {
     var tag: String
     var tagUpdatedAt: Date
-    var type: VersionType
     var buildVersion: String
     var buildMinOsVersion: String
 
