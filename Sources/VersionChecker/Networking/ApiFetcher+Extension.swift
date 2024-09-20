@@ -26,8 +26,7 @@ extension Endpoint {
             URLQueryItem(
                 name: "only",
                 value: "min_version,published_versions.tag,published_versions.tag_updated_at,published_versions.build_version,published_versions.build_min_os_version"
-            ),
-            URLQueryItem(name: "filter_versions[]", value: versionType.rawValue)
+            )
         ])
     }
 }
