@@ -44,7 +44,8 @@ public struct VersionChecker {
             return .updateIsRequired
         }
 
-        if appCanBeUpdated(publishedVersion: latestPublishedVersion) && shouldAskUserToUpdate(publishedVersion: latestPublishedVersion) {
+        if appCanBeUpdated(publishedVersion: latestPublishedVersion) &&
+            shouldAskUserToUpdate(publishedVersion: latestPublishedVersion) {
             VersionChecker.lastRequestVersion = VersionUtils.versionFrom(publishedVersion: latestPublishedVersion)
             return .canBeUpdated
         }
