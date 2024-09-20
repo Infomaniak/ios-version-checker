@@ -21,7 +21,7 @@ import Foundation
 import InfomaniakCore
 
 extension Endpoint {
-    static func version(store: Store, platform: Platform, appName: String, versionType: VersionType) -> Endpoint {
+    static func version(store: Store, platform: Platform, appName: String) -> Endpoint {
         return Endpoint(path: "/1/app-information/versions/\(store.rawValue)/\(platform.rawValue)/\(appName)", queryItems: [
             URLQueryItem(
                 name: "only",
@@ -39,8 +39,8 @@ extension ApiFetcher {
         return decoder
     }
 
-    func version(appName: String, platform: Platform, versionType: VersionType) async throws -> Version {
-        let endpoint = Endpoint.version(store: .appleStore, platform: platform, appName: appName, versionType: versionType)
+    func version(appName: String, platform: Platform) async throws -> Version {
+        let endpoint = Endpoint.version(store: .appleStore, platform: platform, appName: appName)
         return try await perform(request: AF.request(endpoint.url), decoder: versionDecoder)
     }
 }

@@ -35,10 +35,11 @@ public struct VersionChecker {
         guard let bundleIdentifier = Bundle.main.appIdentifier else { return .isUpToDate }
 
         let apiFetcher = ApiFetcher()
-        let version = try await apiFetcher.version(appName: bundleIdentifier, platform: platform, versionType: <#VersionType#>)
+        let version = try await apiFetcher.version(appName: bundleIdentifier, platform: platform)
+
         guard let latestPublishedVersion = version.latestPublishedVersionForCurrentType,
-                     isOSSupported(minimumOSVersion: latestPublishedVersion.buildMinOsVersion) else { return .isUpToDate }
-        
+              isOSSupported(minimumOSVersion: latestPublishedVersion.buildMinOsVersion) else { return .isUpToDate }
+
         if isAppOutdated(version: version) {
             return .updateIsRequired
         }
