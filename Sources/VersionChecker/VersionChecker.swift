@@ -18,13 +18,13 @@
 
 import Alamofire
 import Foundation
-import InfomaniakCore
+@preconcurrency import InfomaniakCore
 
 public enum VersionStatus {
     case updateIsRequired, canBeUpdated, isUpToDate
 }
 
-public struct VersionChecker {
+public struct VersionChecker: Sendable {
     public static let standard = VersionChecker()
 
     private let appLaunchCounter = AppLaunchCounter()
