@@ -7,7 +7,7 @@ let package = Package(
     name: "VersionChecker",
     defaultLocalization: "en",
     platforms: [
-        .iOS(.v13)
+        .iOS(.v15)
     ],
     products: [
         .library(
@@ -16,7 +16,7 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/Infomaniak/ios-core", .upToNextMajor(from: "14.0.0"))
+        .package(url: "https://github.com/Infomaniak/ios-core", .upToNextMajor(from: "15.0.0"))
     ],
     targets: [
         .target(
