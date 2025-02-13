@@ -16,13 +16,15 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/Infomaniak/ios-core", .upToNextMajor(from: "15.0.0"))
+        .package(url: "https://github.com/Infomaniak/ios-core", .upToNextMajor(from: "15.0.0")),
+        .package(path: "/Users/matthieu/Developer/Infomaniak/ios-core-ui/")
     ],
     targets: [
         .target(
             name: "VersionChecker",
             dependencies: [
-                .product(name: "InfomaniakCore", package: "ios-core")
+                .product(name: "InfomaniakCore", package: "ios-core"),
+                .product(name: "InfomaniakCoreSwiftUI", package: "ios-core-ui")
             ]
         ),
         .testTarget(

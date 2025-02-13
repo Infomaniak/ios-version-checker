@@ -21,3 +21,9 @@
 "updateRequiredTitle" = "Actualización requerida";
 "updateRequiredDescription" = "Su versión de la aplicación ya no es compatible.\nInstale la última versión y aproveche las últimas mejoras y nuevas funciones.";
 "updateRequiredButton" = "Actualizar";
+
+/* Update Version */
+
+"buttonLater" = "Más tarde";
+"updateAvailableTitle" = "¡Actualización disponible!";
+"updateAvailableDescription" = "Para disfrutar de la mejor experiencia de mensajería, te recomendamos que actualices tu aplicación.";

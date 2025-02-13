@@ -18,44 +18,6 @@
 
 import SwiftUI
 
-public struct TemplateSharedStyle {
-    public struct TextStyle {
-        public let font: Font
-        public let color: Color
-
-        public init(font: Font, color: Color) {
-            self.font = font
-            self.color = color
-        }
-    }
-
-    public struct ButtonStyle {
-        public let background: Color
-        public let textStyle: TextStyle
-        public let height: CGFloat
-        public let radius: CGFloat
-
-        public init(background: Color, textStyle: TextStyle, height: CGFloat, radius: CGFloat) {
-            self.background = background
-            self.textStyle = textStyle
-            self.height = height
-            self.radius = radius
-        }
-    }
-
-    public let background: Color
-    public let titleTextStyle: TextStyle
-    public let descriptionTextStyle: TextStyle
-    public let buttonStyle: ButtonStyle
-
-    public init(background: Color, titleTextStyle: TextStyle, descriptionTextStyle: TextStyle, buttonStyle: ButtonStyle) {
-        self.background = background
-        self.titleTextStyle = titleTextStyle
-        self.descriptionTextStyle = descriptionTextStyle
-        self.buttonStyle = buttonStyle
-    }
-}
-
 public struct UpdateRequiredView: View {
     public let image: Image
     public let sharedStyle: TemplateSharedStyle
