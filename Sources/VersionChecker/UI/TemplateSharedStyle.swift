@@ -18,8 +18,8 @@
 
 import SwiftUI
 
-public struct TemplateSharedStyle {
-    public struct TextStyle {
+public struct TemplateSharedStyle: Sendable {
+    public struct TextStyle: Sendable {
         public let font: Font
         public let color: Color
 
@@ -29,7 +29,7 @@ public struct TemplateSharedStyle {
         }
     }
 
-    public struct ButtonStyle {
+    public struct ButtonStyle: Sendable {
         public let background: Color
         public let textStyle: TextStyle
         public let height: CGFloat
