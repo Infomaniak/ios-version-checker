@@ -32,18 +32,19 @@ public struct UpdateVersionView: View {
         self.onComplete = onComplete
     }
 
-    public var body: some View {
-        let item = DiscoveryItem(
+    private var item: DiscoveryItem {
+        DiscoveryItem(
             image: image,
             title: String(localized: "updateAvailableTitle", bundle: .module),
             description: String(localized: "updateAvailableDescription", bundle: .module),
             primaryButtonLabel: String(localized: "updateRequiredButton", bundle: .module),
             shouldDisplayLaterButton: true
         )
+    }
 
+    public var body: some View {
         DiscoveryView(item: item) { willUpdate in
             onComplete(willUpdate)
-            dismiss()
         }
     }
 }
