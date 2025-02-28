@@ -24,8 +24,8 @@ public struct UpdateVersionView: View {
     @Environment(\.openURL) private var openURL
     @Environment(\.dismiss) private var dismiss
 
-    private var image: Image
-    private var onComplete: (Bool) -> Void
+    private let image: Image
+    private let onComplete: (Bool) -> Void
 
     public init(image: Image, onComplete: @escaping (Bool) -> Void) {
         self.image = image
@@ -51,6 +51,6 @@ public struct UpdateVersionView: View {
 
 @available(iOS 15.0, *)
 #Preview {
-    UpdateVersionView(image: Image("xmark")) { onComplete in
+    UpdateVersionView(image: Image("xmark")) { _ in
     }
 }
