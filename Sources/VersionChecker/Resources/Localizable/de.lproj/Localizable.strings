@@ -21,3 +21,9 @@
 "updateRequiredTitle" = "Aktualisierung erforderlich";
 "updateRequiredDescription" = "Ihre Version der Anwendung wird nicht mehr unterstützt.\nInstallieren Sie die neueste Version und profitieren Sie von den neuesten Verbesserungen und Neuerungen.";
 "updateRequiredButton" = "Aktualisieren";
+
+/* Update Version */
+
+"buttonLater" = "Später";
+"updateAvailableTitle" = "Aktualisierung verfügbar!";
+"updateAvailableDescription" = "Voor de beste berichtenervaring raden we aan om je app bij te werken.";

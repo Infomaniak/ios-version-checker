@@ -21,3 +21,9 @@
 "updateRequiredTitle" = "Update required";
 "updateRequiredDescription" = "Your application version is no longer supported.\nInstall the latest version and benefit from the latest enhancements and new features.";
 "updateRequiredButton" = "Update";
+
+/* Update Version */
+
+"buttonLater" = "Later";
+"updateAvailableTitle" = "Update available!";
+"updateAvailableDescription" = "For the best messaging experience, we recommend updating your app.";

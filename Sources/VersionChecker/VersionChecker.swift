@@ -20,7 +20,7 @@ import Alamofire
 import Foundation
 @preconcurrency import InfomaniakCore
 
-public enum VersionStatus {
+public enum VersionStatus: Sendable {
     case updateIsRequired, canBeUpdated, isUpToDate
 }
 

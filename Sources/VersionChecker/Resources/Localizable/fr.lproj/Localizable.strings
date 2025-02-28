@@ -21,3 +21,9 @@
 "updateRequiredTitle" = "Mise à jour requise";
 "updateRequiredDescription" = "Votre version de l’application n’est plus supportée.\nInstallez la dernière version et profitez des dernières améliorations et nouveautés.";
 "updateRequiredButton" = "Mettre à jour";
+
+/* Update Version */
+
+"buttonLater" = "Plus tard";
+"updateAvailableTitle" = "Mise à jour disponible !";
+"updateAvailableDescription" = "Afin de profiter d’une expérience optimale d’Infomaniak Mail, nous vous conseillons de mettre à jour votre application.";
