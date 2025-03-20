@@ -69,7 +69,6 @@ public struct UpdateRequiredView: View {
             }
             .padding(.horizontal, 24)
             .padding(.bottom, 16)
-            .background(sharedStyle.background.edgesIgnoringSafeArea(.all))
 
             if let dismissHandler {
                 Button(action: dismissHandler) {
@@ -81,6 +80,8 @@ public struct UpdateRequiredView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             }
         }
+        .frame(maxWidth: .infinity)
+        .background(sharedStyle.background.edgesIgnoringSafeArea(.all))
     }
 }
 
@@ -101,5 +102,4 @@ public struct UpdateRequiredView: View {
     } dismissHandler: {
         /* Dismiss Handler */
     }
-
 }
