@@ -34,7 +34,7 @@ public struct UpdateVersionView: View {
 
     private var item: DiscoveryItem {
         DiscoveryItem(
-            image: image,
+            content: .image(image),
             title: String(localized: "updateAvailableTitle", bundle: .module),
             description: String(localized: "updateAvailableDescription", bundle: .module),
             primaryButtonLabel: String(localized: "updateRequiredButton", bundle: .module),
