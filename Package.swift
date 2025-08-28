@@ -17,7 +17,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/Infomaniak/ios-core", .upToNextMajor(from: "16.0.0")),
-        .package(url: "https://github.com/Infomaniak/ios-core-ui", .branch("refactor/discovery-item-with-lottie"))
+        .package(url: "https://github.com/Infomaniak/ios-core-ui", .upToNextMajor(from: "22.0.0"))
     ],
     targets: [
         .target(
