@@ -1,5 +1,5 @@
 {
-  "originHash" : "d4fca2ae4a08d11d4fe5712418a7966bca5d51b3818565e1cde27a2e12abb812",
+  "originHash" : "4e1d0bfcb4e5561975a1789c1205f3ae1fafa95e2b7c3e671d6fbe8cef9741a9",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Infomaniak/ios-core",
       "state" : {
-        "revision" : "ab299bc6aec7dcc0461792a6c61bcd1126f4dde5",
-        "version" : "18.0.0"
+        "revision" : "da017d3a8f2a44c2602e5880d3edca552b4a8e96",
+        "version" : "18.12.0"
       }
     },
     {
@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Infomaniak/ios-core-ui",
       "state" : {
-        "revision" : "16663433d134f70bf1dbd966b0f292a0941018ea",
-        "version" : "24.0.0"
+        "revision" : "359c413cd80e8493ae4bd33f7943449cc08e5b4f",
+        "version" : "25.0.0"
       }
     },
     {
@@ -47,15 +47,6 @@
       }
     },
     {
-      "identity" : "kingfisher",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/onevcat/Kingfisher",
-      "state" : {
-        "revision" : "2ef543ee21d63734e1c004ad6c870255e8716c50",
-        "version" : "7.12.0"
-      }
-    },
-    {
       "identity" : "lottie-spm",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/airbnb/lottie-spm",
@@ -74,6 +65,15 @@
       }
     },
     {
+      "identity" : "nuke",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kean/Nuke",
+      "state" : {
+        "revision" : "83e19143355b02e9261edb2323b3e1e93287ebb9",
+        "version" : "12.9.0"
+      }
+    },
+    {
       "identity" : "osinfo",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/MarcoEidinger/OSInfo.git",
@@ -87,8 +87,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/realm/realm-core.git",
       "state" : {
-        "revision" : "cccb3ca9e26ec452a29f2f0d4050d1e38b8a3d43",
-        "version" : "14.14.0"
+        "revision" : "4cc46f8607516226e5465062fdacd088fbd94552",
+        "version" : "20.1.4"
       }
     },
     {
@@ -96,8 +96,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/realm/realm-swift",
       "state" : {
-        "revision" : "54eebd2b5e7a4a8055a7a8b55ac859a48462d722",
-        "version" : "10.54.5"
+        "revision" : "600e187711e5fa4e8e2c0429cacee27e8e44f112",
+        "version" : "20.0.4"
       }
     },
     {
@@ -105,35 +105,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getsentry/sentry-cocoa",
       "state" : {
-        "revision" : "3c2eee7773df58bdfb9e10e72d9a4be44253e0d9",
-        "version" : "8.55.0"
-      }
-    },
-    {
-      "identity" : "snackbar.swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Infomaniak/SnackBar.swift",
-      "state" : {
-        "revision" : "7d8d20af50c6b744aa9791b597f7efbd0a15add2",
-        "version" : "1.2.0"
-      }
-    },
-    {
-      "identity" : "snapkit",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SnapKit/SnapKit.git",
-      "state" : {
-        "revision" : "2842e6e84e82eb9a8dac0100ca90d9444b0307f4",
-        "version" : "5.7.1"
-      }
-    },
-    {
-      "identity" : "swiftbackports",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/shaps80/SwiftBackports",
-      "state" : {
-        "revision" : "ddca6a237c1ba2291d5a3cc47ec8480ce6e9f805",
-        "version" : "1.0.3"
+        "revision" : "2c420d31d0c31b525fa9e7c552ef0fc9d924befc",
+        "version" : "9.17.1"
       }
     },
     {
@@ -141,17 +114,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/siteline/SwiftUI-Introspect",
       "state" : {
-        "revision" : "a08b87f96b41055577721a6e397562b21ad52454",
-        "version" : "26.0.0"
-      }
-    },
-    {
-      "identity" : "swiftuibackports",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/shaps80/SwiftUIBackports",
-      "state" : {
-        "revision" : "556d42f391b74059a354b81b8c8e19cc7cb576f4",
-        "version" : "1.15.1"
+        "revision" : "aead9358a55f635d62d885aeb9105752c0213aec",
+        "version" : "27.0.0-beta.1"
       }
     }
   ],
