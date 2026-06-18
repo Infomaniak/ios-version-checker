@@ -19,7 +19,6 @@
 import InfomaniakCoreSwiftUI
 import SwiftUI
 
-@available(iOS 15.0, *)
 public struct UpdateVersionView: View {
     @Environment(\.openURL) private var openURL
     @Environment(\.dismiss) private var dismiss
@@ -49,7 +48,6 @@ public struct UpdateVersionView: View {
     }
 }
 
-@available(iOS 15.0, *)
 #Preview {
     UpdateVersionView(image: Image("xmark")) { _ in
     }
