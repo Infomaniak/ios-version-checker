@@ -1,5 +1,5 @@
 {
-  "originHash" : "4e1d0bfcb4e5561975a1789c1205f3ae1fafa95e2b7c3e671d6fbe8cef9741a9",
+  "originHash" : "68d36bf89a682880375b80ce2ea5911dc1612c72563d0f95290d693d47da023b",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Infomaniak/ios-core",
       "state" : {
-        "revision" : "da017d3a8f2a44c2602e5880d3edca552b4a8e96",
-        "version" : "18.12.0"
+        "revision" : "bb803247827328de9dcb5431fa599992ba6e67cd",
+        "version" : "19.0.0"
       }
     },
     {
@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Infomaniak/ios-core-ui",
       "state" : {
-        "revision" : "359c413cd80e8493ae4bd33f7943449cc08e5b4f",
-        "version" : "25.0.0"
+        "revision" : "7086862e9622fec617d2a2d0bc1c70ab0a21fee9",
+        "version" : "26.0.0"
       }
     },
     {
