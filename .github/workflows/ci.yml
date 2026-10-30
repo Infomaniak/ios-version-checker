@@ -26,4 +26,4 @@ jobs:
       - name: Build
         run: xcodebuild -scheme VersionChecker build -sdk iphonesimulator -destination "generic/platform=iOS"
       - name: Test
-        run: xcodebuild -scheme VersionChecker test -destination "platform=iOS Simulator,name=iPhone 17,OS=latest"
+        run: xcodebuild -scheme VersionChecker test -destination "platform=iOS Simulator,name=${{ vars.LATEST_IPHONE_SIMULATOR }},OS=latest"
